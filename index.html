@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Me - Discord Style</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --bg-gray: #232428; 
+    --accent-color: #1199ff; 
+    --status-online: #43b581;
+    --status-idle: #faa61a;
+    --status-dnd: #f04747;
+    --status-offline: #747f8d;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    background: var(--bg-gray);
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem;
+    color: #e3e3e3;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(29,185,84,0.2), transparent 70%),
+                radial-gradient(circle, rgba(114,137,218,0.15), transparent 70%),
+                radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+    background-size: 400% 400%;
+    animation: gradientMove 20s ease infinite;
+    z-index: 0;
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  .profile-card {
+    position: relative;
+    z-index: 1;
+    background: rgba(35,36,40,0.6);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    padding: 2rem;
+    transition: transform 0.15s ease;
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--accent-color);
+    object-fit: cover;
+  }
+  .status-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    border: 3px solid var(--bg-gray);
+    border-radius: 50%;
+    background-color: var(--status-online);
+  }
+  .status-text {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+
+  h1 { font-size: 2rem; color: var(--accent-color); margin: 0.5rem 0; }
+  h3 { margin-top: 1.5rem; color: var(--accent-color); }
+
+  .skills {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .skill {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    transition: transform 0.2s;
+  }
+  .skill:hover { transform: scale(1.2); }
+  .skill i {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 5px;
+  }
+
+  .button-row {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--accent-color);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+  }
+  .btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+    transform: translateY(-2px) scale(1.05);
+  }
+
+  /* Spotify activity card */
+  #spotify-activity {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 14px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.95rem;
+    display: none;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(29,185,84,0.5);
+    box-shadow: 0 0 12px rgba(29,185,84,0.7);
+    backdrop-filter: blur(12px);
+    transition: all 0.15s ease;
+  }
+  #spotify-activity::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+    z-index: 0;
+    border-radius: 14px;
+  }
+  #spotify-activity span {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 600px) {
+    .avatar { width: 100px; height: 100px; }
+    .skill i { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div id="card" class="profile-card">
+  <div class="avatar-wrapper">
+    <img src="https://cdn.discordapp.com/embed/avatars/1.png" alt="Profile Picture" class="avatar">
+    <div id="status-indicator" class="status-indicator"></div>
+  </div>
+  <span id="status-text" class="status-text">Online</span>
+
+  <h1>RandomX917</h1>
+  <p>He/Him</p>
+
+  <!-- Spotify Activity Card -->
+  <div id="spotify-activity"><span></span></div>
+
+  <p>Just here in this world to have fun ig.</p>
+
+  <h3>Likes</h3>
+  <p>- Chocolate</p>
+  <p>- Gaming</p>
+  <p>- Coding</p>
+  <p>- Sleeping</p>
+
+  <h3>Skills</h3>
+  <div class="skills">
+    <div class="skill"><i class="fas fa-code"></i> Code</div>
+    <div class="skill"><i class="fab fa-html5"></i> HTML</div>
+    <div class="skill"><i class="fab fa-css3-alt"></i> CSS</div>
+    <div class="skill"><i class="fab fa-js-square"></i> JS</div>
+  </div>
+
+  <h3>Projects</h3>
+  <div class="button-row">
+    <a href="#" class="btn"><i class="fas fa-laptop-code"></i> Cool Project</a>
+  </div>
+
+  <h3>Socials</h3>
+  <div class="button-row">
+    <a href="https://github.com/RandomV5" target="_blank" class="btn"><i class="fab fa-github"></i> GitHub</a>
+    <a href="https://discord.com/users/1252383932918403143" target="_blank" class="btn"><i class="fab fa-discord"></i> Discord</a>
+    <a href="https://www.tiktok.com/@randomx917.us" target="_blank" class="btn"><i class="fab fa-tiktok"></i> TikTok</a>
+    <a href="https://open.spotify.com/user/YOUR_SPOTIFY_ID" target="_blank" class="btn"><i class="fab fa-spotify"></i> Spotify</a>
+  </div>
+</div>
+
+<script>
+const card = document.getElementById("card");
+const userId = "1252383932918403143";
+const statusIndicator = document.getElementById("status-indicator");
+const statusText = document.getElementById("status-text");
+const spotifyActivity = document.getElementById("spotify-activity");
+const spotifyText = spotifyActivity.querySelector("span");
+
+// Mouse tilt for card
+document.addEventListener("mousemove", (e) => {
+  const rect = card.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+  const rotateX = -(y / rect.height) * 15;
+  const rotateY = (x / rect.width) * 15;
+  card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+  // Move Spotify highlight subtly
+  spotifyActivity.style.backgroundPosition = `${50 + x / rect.width * 10}% ${50 + y / rect.height * 10}%`;
+});
+document.addEventListener("mouseleave", () => {
+  card.style.transform = "rotateX(0deg) rotateY(0deg)";
+  spotifyActivity.style.backgroundPosition = "50% 50%";
+});
+
+// Discord + Spotify via Lanyard
+fetch(`https://api.lanyard.rest/v1/users/${userId}`)
+  .then(res => res.json())
+  .then(data => {
+    if(data.success) {
+      const status = data.data.discord_status || "offline";
+      statusText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+      statusText.style.color = getStatusColor(status);
+      statusIndicator.style.backgroundColor = getStatusColor(status);
+
+      if (data.data.listening_to_spotify) {
+        const spotify = data.data.spotify;
+        spotifyActivity.style.display = "block";
+        spotifyActivity.style.backgroundImage = `url(${spotify.album_art_url})`;
+        spotifyText.textContent = `🎵 ${spotify.song} - ${spotify.artist}`;
+      }
+    }
+  })
+  .catch(err => console.log("Lanyard API error", err));
+
+function getStatusColor(status) {
+  switch(status) {
+    case "online": return "#43b581";
+    case "idle": return "#faa61a";
+    case "dnd": return "#f04747";
+    case "offline": return "#747f8d";
+    default: return "#747f8d";
+  }
+}
+</script>
+</body>
+</html>
